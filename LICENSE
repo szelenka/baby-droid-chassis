@@ -1,0 +1,81 @@
+# License
+
+## Baby Droid Chassis Firmware
+
+Copyright (c) 2025 szelenka
+
+### Terms for This Project's Code
+
+This project (the "Baby Droid Chassis" firmware) is licensed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0)**.
+
+**You are free to:**
+- **Share** — copy and redistribute the material in any medium or format
+- **Adapt** — remix, transform, and build upon the material
+
+**Under the following terms:**
+- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made.
+- **NonCommercial** — You may not use the material for commercial purposes. This includes:
+  - Selling products that use this firmware
+  - Using this firmware in commercial products or services
+  - Any use where the primary purpose is monetary compensation or commercial advantage
+- **ShareAlike** — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
+
+**Personal and Educational Use:**
+- ✅ Building your own droid for personal enjoyment
+- ✅ Educational projects and learning
+- ✅ Non-profit maker/hobbyist communities
+- ✅ Open-source contributions and improvements
+
+**Commercial Use Restrictions:**
+- ❌ Manufacturing and selling droids with this firmware
+- ❌ Offering droid-building services for profit
+- ❌ Including this firmware in commercial products
+
+For commercial licensing inquiries, please contact the author.
+
+Full license text: https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+
+---
+
+## Third-Party Libraries and Dependencies
+
+This project uses the following open-source libraries, each with their own licenses:
+
+### ESP32Servo Library
+- **License**: MIT License
+- **Copyright**: (c) Kevin Harrington (madhephaestus)
+- **Repository**: https://github.com/madhephaestus/ESP32Servo
+- **License Text**: https://github.com/madhephaestus/ESP32Servo/blob/master/LICENSE
+
+### ESP32 Arduino Framework
+- **License**: GNU Lesser General Public License v2.1 (LGPL-2.1)
+- **Copyright**: Espressif Systems
+- **Repository**: https://github.com/espressif/arduino-esp32
+- **License Text**: https://github.com/espressif/arduino-esp32/blob/master/LICENSE.md
+- **Note**: LGPL allows linking with proprietary code but requires sharing modifications to the framework itself
+
+### FreeRTOS
+- **License**: MIT License
+- **Copyright**: Amazon.com, Inc. or its affiliates
+- **Included in**: ESP-IDF (ESP32 development framework)
+- **License Text**: https://www.freertos.org/a00114.html
+
+### ESP-NOW Protocol
+- **License**: Apache License 2.0
+- **Copyright**: Espressif Systems
+- **Part of**: ESP-IDF
+- **License Text**: https://github.com/espressif/esp-idf/blob/master/LICENSE
+
+---
+
+## License Compatibility Notice
+
+The CC BY-NC-SA 4.0 license for this project's code is compatible with the above open-source licenses for personal and non-commercial use. The underlying libraries (MIT, LGPL-2.1, Apache 2.0) permit broader use, including commercial applications, but **this firmware's CC BY-NC-SA 4.0 license restricts the combined work to non-commercial use only**.
+
+If you wish to use the underlying libraries in a commercial project without this firmware, you are free to do so under their respective permissive licenses.
+
+---
+
+## Disclaimer
+
+THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
