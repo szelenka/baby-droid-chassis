@@ -3,6 +3,7 @@
 #include <esp_now.h>
 #include <esp_wifi.h>
 #include <ESP32Servo.h>
+#include <DFRobotDFPlayerMini.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/semphr.h>
 #include "config.h"
@@ -11,6 +12,13 @@
 Servo servoLeft;
 Servo servoRight;
 Servo servoDome;
+
+// DFPlayer
+HardwareSerial dfPlayerSerial(1);
+DFRobotDFPlayerMini dfPlayer;
+bool dfPlayerReady = false;
+int dfPlayerFileCount = 0;
+bool soundButtonWasPressed = false;
 
 // Command tracking
 unsigned long lastCommandTime = 0;
@@ -321,9 +329,51 @@ void initServos() {
     Serial.println(servoDome.attached() ? "YES" : "NO");
 }
 
+void initDFPlayer() {
+    dfPlayerSerial.setPins(DFPLAYER_RX_PIN, DFPLAYER_TX_PIN, -1, -1);
+    dfPlayerSerial.begin(DFPLAYER_BAUD, SERIAL_8N1, DFPLAYER_RX_PIN, DFPLAYER_TX_PIN);
+    delay(1000);
+
+    if (!dfPlayer.begin(dfPlayerSerial, /*isACK=*/true, /*doReset=*/true)) {
+        delay(1000);
+        if (!dfPlayer.begin(dfPlayerSerial, /*isACK=*/false, /*doReset=*/false)) {
+            Serial.println("DFPlayer: not detected. Check wiring and SD card.");
+            dfPlayerReady = false;
+            return;
+        }
+    }
+
+    dfPlayerReady = true;
+    dfPlayer.setTimeOut(500);
+    dfPlayer.volume(DFPLAYER_VOLUME);
+    delay(100);
+
+    dfPlayerFileCount = dfPlayer.readFileCounts();
+    if (dfPlayerFileCount <= 0) {
+        dfPlayerFileCount = 0;
+    }
+    Serial.printf("DFPlayer ready: volume %d, files: %d\n", DFPLAYER_VOLUME, dfPlayerFileCount);
+}
+
+void handleSound(uint8_t buttonMask) {
+    bool soundPressed = (buttonMask >> BUTTON_5_BIT) & 1;
+
+    if (soundPressed && !soundButtonWasPressed) {
+        if (!dfPlayerReady) {
+            return;
+        }
+        int count = dfPlayerFileCount > 0 ? dfPlayerFileCount : DFPLAYER_FILE_COUNT;
+        int track = random(1, count + 1);
+        dfPlayer.play(track);
+    }
+    soundButtonWasPressed = soundPressed;
+}
+
 void updateMotors() {
 #if BATTERY_MONITOR_ENABLED
-    if (batteryState == BATTERY_CRITICAL) {
+    // Only enforce critical lockout if a real battery voltage is detected (above 2V).
+    // This avoids blocking motors when running USB-only with no battery connected.
+    if (batteryState == BATTERY_CRITICAL && filteredBatteryMilliVolts > 2000) {
         stopAllMotors();
         return;
     }
@@ -366,10 +416,10 @@ void updateMotors() {
 
     // Handle dome rotation (independent of drive)
     if (domeLeft && !domeRight) {
-        servoDome.writeMicroseconds(SERVO_DOME_STOP_US - DOME_SPEED_US);  // Rotate left
+        servoDome.writeMicroseconds(SERVO_DOME_STOP_US - DOME_SPEED_US);
         domeStopped = false;
     } else if (domeRight && !domeLeft) {
-        servoDome.writeMicroseconds(SERVO_DOME_STOP_US + DOME_SPEED_US);  // Rotate right
+        servoDome.writeMicroseconds(SERVO_DOME_STOP_US + DOME_SPEED_US);
         domeStopped = false;
     } else if (!domeStopped) {
         // Only send stop command once
@@ -468,6 +518,9 @@ void setup() {
     // Initialize ESP-NOW
     initESPNow();
 
+    // Initialize DFPlayer Mini (after ESP-NOW to avoid UART/radio conflicts)
+    initDFPlayer();
+
     Serial.println("Chassis ready!");
 }
 
@@ -476,6 +529,14 @@ void loop() {
     updateBatteryMonitor();
     updateBatteryStatusLed();
 #endif
+
+    // Handle sound trigger from button 5
+    uint8_t buttonMask;
+    if (xSemaphoreTake(dataMutex, 0) == pdTRUE) {
+        buttonMask = currentButtonMask;
+        xSemaphoreGive(dataMutex);
+        handleSound(buttonMask);
+    }
 
     // Update motor speeds based on current button state
     updateMotors();

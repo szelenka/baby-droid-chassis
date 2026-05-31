@@ -63,6 +63,15 @@
 #define BATTERY_LOW_BLINK_MS              500
 #define BATTERY_CRITICAL_BLINK_MS         150
 
+// DFPlayer Mini Configuration
+// Connected via hardware UART: XIAO TX (D6) -> DFPlayer RX, XIAO RX (D7) -> DFPlayer TX
+// Place a 1K resistor between D6 and DFPlayer RX
+#define DFPLAYER_TX_PIN         D6
+#define DFPLAYER_RX_PIN         D7
+#define DFPLAYER_VOLUME         25      // 0-30
+#define DFPLAYER_BAUD           9600
+#define DFPLAYER_FILE_COUNT     50      // Number of MP3 files on SD card (named 0001.mp3 .. NNNN.mp3)
+
 // Calibration mode - uncomment to enable manual servo calibration
 // #define CALIBRATION_MODE
 
@@ -74,6 +83,6 @@
 // Allowed Controller MAC Address (optional security feature)
 // Set to controller's MAC address to only accept commands from that device
 // Comment out to accept commands from any ESP-NOW transmitter
-#define ALLOWED_CONTROLLER_MAC {0x0C, 0x8B, 0x95, 0x94, 0xF1, 0x00}
+#define ALLOWED_CONTROLLER_MAC {0x10, 0x51, 0xDB, 0x1C, 0x80, 0x98}
 
 #endif // CONFIG_H
