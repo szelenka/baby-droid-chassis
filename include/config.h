@@ -83,6 +83,6 @@
 // Allowed Controller MAC Address (optional security feature)
 // Set to controller's MAC address to only accept commands from that device
 // Comment out to accept commands from any ESP-NOW transmitter
-#define ALLOWED_CONTROLLER_MAC {0x10, 0x51, 0xDB, 0x1C, 0x80, 0x98}
+#define ALLOWED_CONTROLLER_MAC {0xC, 0x8B, 0x95, 0x94, 0xF1, 0x0}
 
 #endif // CONFIG_H
