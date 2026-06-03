@@ -26,10 +26,28 @@
 #define SERVO_MAX_US        2200  // Maximum pulse width in microseconds
 
 // Individual servo stop positions (calibrated for each servo)
-// Adjust these values to find the exact stop point for each servo
-#define SERVO_LEFT_STOP_US   1455  // Left wheel servo stop point (calibrated)
-#define SERVO_RIGHT_STOP_US  1455  // Right wheel servo stop point (calibrated)
-#define SERVO_DOME_STOP_US   1465  // Dome servo stop point (1440 actual, +15µs compensation)
+// These are mutually exclusive — only one set will be defined.
+#if defined(DROID_CHEEP)
+#define SERVO_LEFT_STOP_US   1475  // Left wheel servo stop point (calibrated)
+#define SERVO_RIGHT_STOP_US  1475  // Right wheel servo stop point (calibrated)
+#define SERVO_DOME_STOP_US   1450  // Dome servo stop point (1440 actual, +15µs compensation)
+#elif defined(DROID_KE4)
+#define SERVO_LEFT_STOP_US   1480  // Left wheel servo st op point (calibrated)
+#define SERVO_RIGHT_STOP_US  1500  // Right wheel servo stop point (calibrated)
+#define SERVO_DOME_STOP_US   1430  // Dome servo stop point (calibrated)
+#elif defined(DROID_CHOPPER)
+#define SERVO_LEFT_STOP_US   1500  // Left wheel servo stop point (calibrated)
+#define SERVO_RIGHT_STOP_US  1500  // Right wheel servo stop point (calibrated)
+#define SERVO_DOME_STOP_US   1500  // Dome servo stop point (calibrated)
+#elif defined(DROID_R5)
+#define SERVO_LEFT_STOP_US   1500  // Left wheel servo stop point (calibrated)
+#define SERVO_RIGHT_STOP_US  1500  // Right wheel servo stop point (calibrated)
+#define SERVO_DOME_STOP_US   1500  // Dome servo stop point (calibrated)
+else
+#define SERVO_LEFT_STOP_US   1500  // Left wheel servo stop point (calibrated)
+#define SERVO_RIGHT_STOP_US  1500  // Right wheel servo stop point (calibrated)
+#define SERVO_DOME_STOP_US   1500  // Dome servo stop point (calibrated)
+#endif
 
 // Speed configuration for continuous rotation servos (microseconds offset from stop position)
 #define DRIVE_SPEED_US      400   // Full speed forward/backward in microseconds offset from stop
@@ -68,7 +86,7 @@
 // Place a 1K resistor between D6 and DFPlayer RX
 #define DFPLAYER_TX_PIN         D6
 #define DFPLAYER_RX_PIN         D7
-#define DFPLAYER_VOLUME         25      // 0-30
+#define DFPLAYER_VOLUME         30      // 0-30
 #define DFPLAYER_BAUD           9600
 #define DFPLAYER_FILE_COUNT     50      // Number of MP3 files on SD card (named 0001.mp3 .. NNNN.mp3)
 
@@ -78,11 +96,30 @@
 // ESP-NOW Configuration
 // This will be the receiver - MAC address should match TARGET_MAC_ADDRESS in controller
 // You can get this device's MAC address from Serial output on first run
+#if defined(DROID_CHEEP)
 #define WIFI_CHANNEL        1
+#elif defined(DROID_KE4)
+#define WIFI_CHANNEL        2
+#elif defined(DROID_CHOPPER)
+#define WIFI_CHANNEL        3
+#elif defined(DROID_R5)
+#define WIFI_CHANNEL        4
+#else
+#endif
 
 // Allowed Controller MAC Address (optional security feature)
 // Set to controller's MAC address to only accept commands from that device
 // Comment out to accept commands from any ESP-NOW transmitter
+#if defined(DROID_CHEEP)
 #define ALLOWED_CONTROLLER_MAC {0xC, 0x8B, 0x95, 0x94, 0xF1, 0x0}
+#elif defined(DROID_KE4)
+#define ALLOWED_CONTROLLER_MAC {0x10, 0x51, 0xDB, 0x1C, 0x80, 0x98}
+#elif defined(DROID_CHOPPER)
+#define ALLOWED_CONTROLLER_MAC {0x1, 0x2, 0x3, 0x4, 0x5, 0x6}
+#elif defined(DROID_R5)
+#define ALLOWED_CONTROLLER_MAC {0x1, 0x2, 0x3, 0x4, 0x5, 0x6}
+#else
+#define ALLOWED_CONTROLLER_MAC {0x1, 0x2, 0x3, 0x4, 0x5, 0x6}
+#endif
 
 #endif // CONFIG_H
